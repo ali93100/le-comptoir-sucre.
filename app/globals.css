@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — source unique de vérité.
+ *
+ * Toute couleur, tout rayon, toute ombre, tout espacement utilisé dans
+ * l'application DOIT venir d'ici (directement en CSS, ou via les classes
+ * Tailwind générées par le bloc @theme ci-dessous). Ne jamais écrire une
+ * valeur hex, un rayon ou une ombre en dur dans un composant.
+ *
+ * L'échelle d'espacement (4, 8, 12, 16, 24, 32, 48, 64, 96, 128px) n'a pas
+ * besoin d'être redéfinie : elle correspond exactement à l'échelle par
+ * défaut de Tailwind (1=4px, 2=8px, 3=12px, 4=16px, 6=24px, 8=32px,
+ * 12=48px, 16=64px, 24=96px, 32=128px). Utiliser directement p-4, gap-8,
+ * py-24, etc.
+ */
+:root {
+  /* Couleurs (voir doc "Architecture & Direction Artistique", section 3) */
+  --color-cream: #faf3e8;
+  --color-beige: #f0e4d3;
+  --color-terracotta: #c97354;
+  --color-terracotta-dark: #a85a40;
+  --color-rose: #eac0bc;
+  --color-sauge: #8fa07e;
+  --color-ink: #3e2e24;
+  --color-ink-soft: #6e5b4e;
+  --color-white: #ffffff;
+
+  /* Rayons — l'arche n'est arrondie qu'en haut (portes) */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 999px;
+  --radius-arch: 999px;
+
+  /* Ombres — toujours douces et diffuses, jamais de contour dur */
+  --shadow-soft: 0 2px 10px rgba(62, 46, 36, 0.07);
+  --shadow-hover: 0 10px 28px rgba(62, 46, 36, 0.12);
+  --shadow-elevated: 0 20px 48px rgba(62, 46, 36, 0.16);
+
+  /* z-index — une seule échelle pour toute l'application */
+  --z-nav: 40;
+  --z-drawer: 50;
+  --z-page-transition: 60;
+  --z-modal: 70;
+
+  /* Motion — durées et easings, consommés par Motion et par les
+     transitions CSS via la syntaxe Tailwind [var(--...)] */
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Polices — les variables --font-fraunces / --font-ui-sans sont injectées
+     par next/font dans app/layout.tsx */
+  --font-display: var(--font-fraunces);
+  --font-ui: var(--font-ui-sans);
+}
+
+/*
+ * Pont vers Tailwind v4 : on ne redéfinit aucune valeur ici, on fait
+ * seulement pointer les namespaces Tailwind vers les variables ci-dessus,
+ * pour que bg-terracotta, rounded-pill, shadow-soft, font-display,
+ * ease-standard, etc. restent la même source de vérité.
+ */
+@theme inline {
+  --color-cream: var(--color-cream);
+  --color-beige: var(--color-beige);
+  --color-terracotta: var(--color-terracotta);
+  --color-terracotta-dark: var(--color-terracotta-dark);
+  --color-rose: var(--color-rose);
+  --color-sauge: var(--color-sauge);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-white: var(--color-white);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+
+  --shadow-soft: var(--shadow-soft);
+  --shadow-hover: var(--shadow-hover);
+  --shadow-elevated: var(--shadow-elevated);
+
+  --ease-standard: var(--ease-standard);
+  --ease-out-soft: var(--ease-out-soft);
+
+  --font-display: var(--font-display);
+  --font-ui: var(--font-ui);
+
+  /* Points de rupture du brief : mobile < 640, tablette 640–1024,
+     desktop 1024–1440, grand écran > 1440 */
+  --breakpoint-sm: 40rem; /* 640px — début tablette */
+  --breakpoint-md: 64rem; /* 1024px — début desktop */
+  --breakpoint-lg: 90rem; /* 1440px — grand écran */
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-ui), system-ui, sans-serif;
+}
+
+/* Respect de prefers-reduced-motion : neutralise les transitions/animations
+   non essentielles pour qui le demande. Chaque animation de section future
+   (scroll storytelling, personnage, parallaxe) doit se brancher sur cette
+   règle ou sur son équivalent JS (useReducedMotionSafe). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

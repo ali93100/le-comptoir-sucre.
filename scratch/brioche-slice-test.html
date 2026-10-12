@@ -1,0 +1,312 @@
+<title>Tranche brioche v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  :root {
+    --cream: #faf3e8;
+    --beige: #f0e4d3;
+    --terracotta: #c97354;
+    --terracotta-dark: #a85a40;
+    --rose: #eac0bc;
+    --sauge: #8fa07e;
+    --ink: #3e2e24;
+    --ink-soft: #6e5b4e;
+    --white: #ffffff;
+
+    --page-bg: var(--cream);
+    --page-text: var(--ink);
+    --page-text-soft: var(--ink-soft);
+    --card-border: rgba(62, 46, 36, 0.12);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page-bg: #221913;
+      --page-text: #f3e9dd;
+      --page-text-soft: #c9b8a8;
+      --card-border: rgba(243, 233, 221, 0.14);
+    }
+  }
+  :root[data-theme="dark"] {
+    --page-bg: #221913;
+    --page-text: #f3e9dd;
+    --page-text-soft: #c9b8a8;
+    --card-border: rgba(243, 233, 221, 0.14);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--page-text);
+    font-family: "Inter", system-ui, sans-serif;
+    padding-inline: 24px;
+    padding-block: 48px;
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 500;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+  .intro {
+    max-width: 62ch;
+    color: var(--page-text-soft);
+    line-height: 1.6;
+    margin: 0 0 12px;
+  }
+  .diff {
+    max-width: 62ch;
+    color: var(--page-text-soft);
+    line-height: 1.6;
+    margin: 0 0 40px;
+    font-size: 14px;
+  }
+  .diff b {
+    color: var(--page-text);
+  }
+  section {
+    max-width: 1100px;
+    margin: 0 auto 64px;
+  }
+  .section-label {
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    margin: 0 0 4px;
+  }
+  h2 {
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0 0 6px;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-end;
+  }
+  .card {
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .card.tone-cream {
+    background: var(--cream);
+  }
+  .card.tone-white {
+    background: var(--white);
+  }
+  .card.tone-beige {
+    background: var(--beige);
+  }
+  .card small {
+    font-size: 12px;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+  }
+  .small-row .card {
+    padding: 14px;
+    gap: 6px;
+  }
+  .pose-row .card {
+    min-width: 150px;
+  }
+</style>
+
+<h1>Test v2 — tranche de brioche, rendu enrichi</h1>
+<p class="intro">
+  Page de travail interne. Même silhouette (croûte + mie) que le test précédent, mais avec
+  les dégradés, le petit museau et les bras/jambes en pâte tressée demandés.
+</p>
+<p class="diff">
+  <b>Ce qui change vs. la v1 :</b> dégradé terracotta → terracotta-dark sur la croûte
+  (effet cuit/bombé), dégradé cream → beige sur la mie (effet moelleux), reflet flouté en
+  haut à gauche, petit museau rond, bras/jambes en lobes de pâte qui se chevauchent au
+  lieu de tubes lisses. Toutes les couleurs restent les 9 tokens du projet.
+</p>
+
+<section>
+  <p class="section-label">Silhouette avec relief</p>
+  <h2>Croûte + mie en dégradé, sans visage</h2>
+  <div class="row" id="silhouette-row"></div>
+
+  <p class="section-label" style="margin-top: 32px">Robustesse petite taille</p>
+  <div class="row small-row" id="small-row"></div>
+</section>
+
+<section>
+  <p class="section-label">Avec visage, museau, bras tressés</p>
+  <h2>Les 4 poses — même tranche, rien ne change dans la forme de base</h2>
+  <div class="row pose-row" id="pose-row"></div>
+</section>
+
+<script>
+  const CRUST =
+    "M70,14 C95,10 120,12 140,18 C162,24 178,38 182,55 C186,75 180,95 178,110 C176,128 162,142 145,152 C120,162 95,160 75,158 C50,156 30,148 25,130 C18,108 14,85 16,70 C18,50 30,28 50,20 C57,17 63,15 70,14 Z";
+  const CRUMB =
+    "M76,32 C95,26 112,27 128,34 C144,41 156,50 160,62 C164,78 160,95 156,108 C152,120 142,128 130,134 C112,140 96,139 80,136 C64,133 50,126 42,116 C34,104 32,88 38,72 C42,58 58,38 76,32 Z";
+  const ALVEOLI = [
+    [52, 50, 4, 3],
+    [145, 48, 3.5, 5],
+    [150, 100, 4.5, 3.5],
+    [48, 115, 4, 3],
+    [95, 125, 5, 3.5],
+  ];
+  const WAVE_LOBES = [
+    [42, 95, 15, 13],
+    [32, 68, 13, 14],
+    [38, 42, 11, 10],
+  ];
+  const TRAY_L = [
+    [35, 145, 13, 12],
+    [60, 158, 11, 9],
+  ];
+  const TRAY_R = [
+    [165, 145, 13, 12],
+    [140, 158, 11, 9],
+  ];
+
+  function defs(uid) {
+    return `<defs>
+      <linearGradient id="crust-${uid}" x1="0" y1="0" x2="0.3" y2="1">
+        <stop offset="0%" stop-color="var(--terracotta)"/>
+        <stop offset="100%" stop-color="var(--terracotta-dark)"/>
+      </linearGradient>
+      <radialGradient id="crumb-${uid}" cx="35%" cy="30%" r="75%">
+        <stop offset="0%" stop-color="var(--cream)"/>
+        <stop offset="100%" stop-color="var(--beige)"/>
+      </radialGradient>
+      <filter id="blur-${uid}" x="-60%" y="-60%" width="220%" height="220%">
+        <feGaussianBlur stdDeviation="4"/>
+      </filter>
+    </defs>`;
+  }
+
+  function lobes(list, uid) {
+    return list
+      .map(
+        ([cx, cy, rx, ry]) =>
+          `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="url(#crust-${uid})"/>`,
+      )
+      .join("");
+  }
+
+  function silhouette(uid, withFace) {
+    let s = defs(uid);
+    s += `<path d="${CRUST}" fill="url(#crust-${uid})"/>`;
+    s += `<path d="${CRUMB}" fill="url(#crumb-${uid})"/>`;
+    s += `<ellipse cx="66" cy="55" rx="22" ry="14" fill="var(--cream)" opacity="0.5" filter="url(#blur-${uid})"/>`;
+    s +=
+      `<g fill="var(--ink)" opacity="0.09">` +
+      ALVEOLI.map(
+        ([cx, cy, rx, ry]) => `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"/>`,
+      ).join("") +
+      `</g>`;
+    if (withFace) s += `<circle cx="98" cy="85" r="9" fill="url(#crust-${uid})"/>`;
+    return s;
+  }
+
+  function faceCalm() {
+    return `<g stroke="var(--ink)" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M78,70 Q83,66 88,70"/><path d="M108,70 Q113,66 118,70"/>
+      <path d="M85,101 Q98,105 111,101"/>
+    </g>`;
+  }
+  function faceAlert() {
+    return `<g fill="var(--ink)"><ellipse cx="83" cy="70" rx="2.6" ry="3.6"/><ellipse cx="113" cy="70" rx="2.6" ry="3.6"/></g>
+      <path d="M83,100 Q98,110 113,100" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" fill="none"/>`;
+  }
+  function faceHappy() {
+    return `<g stroke="var(--ink)" stroke-width="3" stroke-linecap="round" fill="none">
+      <path d="M75,72 Q83,62 91,72"/><path d="M105,72 Q113,62 121,72"/>
+    </g>
+    <path d="M80,99 Q98,112 116,99" stroke="var(--ink)" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <ellipse cx="68" cy="90" rx="6" ry="4" fill="var(--rose)" opacity="0.6"/>
+    <ellipse cx="128" cy="90" rx="6" ry="4" fill="var(--rose)" opacity="0.6"/>`;
+  }
+  function tray(uid) {
+    return `<ellipse cx="100" cy="168" rx="40" ry="11" fill="var(--white)" stroke="var(--terracotta)" stroke-width="4"/>
+      <path d="M120,166 Q126,160 132,164" stroke="var(--sauge)" stroke-width="2.5" stroke-linecap="round" fill="none"/>`;
+  }
+
+  function svg(uid, size, inner) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 200 200">${inner}</svg>`;
+  }
+
+  let uidCounter = 0;
+  function nextUid() {
+    return "u" + uidCounter++;
+  }
+
+  function card(tone, label, size, inner) {
+    return `<div class="card tone-${tone}">${inner}<small>${label}</small></div>`;
+  }
+
+  // Silhouette row (no face), 3 backgrounds
+  const silRow = document.getElementById("silhouette-row");
+  ["cream", "white", "beige"].forEach((tone) => {
+    const uid = nextUid();
+    silRow.innerHTML += card(
+      tone,
+      `fond ${tone}`,
+      220,
+      svg(uid, 220, silhouette(uid, false)),
+    );
+  });
+
+  // Small size robustness
+  const smallRow = document.getElementById("small-row");
+  [64, 48, 32].forEach((size) => {
+    const uid = nextUid();
+    smallRow.innerHTML += card(
+      "cream",
+      `${size}px`,
+      size,
+      svg(uid, size, silhouette(uid, false)),
+    );
+  });
+
+  // 4 poses
+  const poseRow = document.getElementById("pose-row");
+  const poses = [
+    { name: "idle", face: faceCalm, limbs: "" },
+    {
+      name: "wave",
+      face: faceAlert,
+      limbs: (uid) =>
+        lobes(WAVE_LOBES, uid) +
+        `<g stroke="var(--terracotta-dark)" stroke-width="1.5" opacity="0.4" fill="none" stroke-linecap="round"><path d="M36,88 Q44,82 34,76"/><path d="M34,60 Q40,54 32,50"/></g>`,
+    },
+    { name: "happy", face: faceHappy, limbs: "" },
+    {
+      name: "carry-tray",
+      face: faceCalm,
+      limbs: (uid) => lobes(TRAY_L, uid) + lobes(TRAY_R, uid),
+    },
+  ];
+  poses.forEach(({ name, face, limbs }) => {
+    const uid = nextUid();
+    let inner = silhouette(uid, true);
+    if (limbs) inner += typeof limbs === "function" ? limbs(uid) : limbs;
+    inner += face();
+    if (name === "carry-tray") inner += tray(uid);
+    poseRow.innerHTML += card("cream", name, 170, svg(uid, 170, inner));
+  });
+</script>
